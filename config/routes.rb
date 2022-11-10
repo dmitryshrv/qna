@@ -3,4 +3,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   #root "application#home"
+  resources :questions do
+    resources :answers, shallow: true
+  end
 end
