@@ -1,17 +1,20 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+
   def index
     @questions = Question.all
   end
 
-  def show; end
+  def show
+
+  end
 
   def new; end
 
   def edit; end
 
   def create
-    @question = Question.new(question_params)
+    @question = current_user.questions.new(question_params)
 
     if @question.save
       flash[:notice] = 'Your question successfully created.'
@@ -30,8 +33,11 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    question.destroy
-    redirect_to questions_path
+    if current_user == question.user
+      question.destroy
+      redirect_to questions_path, notice:"Question is successfully deleted"
+    end
+
   end
 
   private
